@@ -54,8 +54,42 @@ Vagrant multi-VM lab setup using VirtualBox provider.
 - ls
 - cd ..
 - cd ..
-- cd source
-- ls
+
+## Commands used for experiment 4
+
+- sudo mkdir -p /var/log/myapp
+- echo "Application started successfully" | sudo tee /var/log/myapp/app.log
+- echo "User login successful" | sudo tee -a /var/log/myapp/app.log
+- echo "Database connection successful" | sudo tee -a /var/log/myapp/app.log
+- cat /var/log/myapp/app.log
+- sudo vi /etc/logrotate.d/myapp
+- sudo logrotate -d /etc/logrotate.d/myapp
+- sudo logrotate -f /etc/logrotate.d/myapp
+- ls -lh /var/log/myapp/
+- sudo vi /usr/local/bin/disk-health.sh
+- sudo chmod +x /usr/local/bin/disk-health.sh
+- sudo /usr/local/bin/disk-health.sh
+- sudo cat /var/log/disk-health.log
+- sudo vi /etc/systemd/system/disk-health.service
+- sudo systemctl daemon-reload
+- sudo systemctl start disk-health.service
+- sudo systemctl status disk-health.service
+- sudo tail -20 /var/log/disk-health.log
+- sudo vi /etc/systemd/system/disk-health.timer
+- sudo systemctl daemon-reload
+- sudo systemctl enable --now disk-health.timer
+- systemctl status disk-health.timer
+- systemctl list-timers
+- disk-health.timer
+- sudo vi /etc/systemd/system/disk-health.timer\
+- disk-health.timer
+- sudo systemctl daemon-reload
+- sudo systemctl restart disk-health.timer
+- systemctl list-timers
+- sudo tail -30 /var/log/disk-health.log
+- sudo journalctl -u disk-health.service
+- sudo journalctl -u disk-health.timer
+- sudo journalctl -u disk-health.service -n 10
 - cat data.txt
 - cat report.txt
 - cat student.txt

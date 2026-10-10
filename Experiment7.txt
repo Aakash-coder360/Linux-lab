@@ -1,0 +1,178 @@
+vagrant@ig-ubuntu:~$ sudo apt update
+Get:1 http://security.ubuntu.com/ubuntu jammy-security InRelease [129 kB]
+Hit:2 http://us.archive.ubuntu.com/ubuntu jammy InRelease
+Get:3 http://us.archive.ubuntu.com/ubuntu jammy-updates InRelease [128 kB]
+Get:4 http://us.archive.ubuntu.com/ubuntu jammy-backports InRelease [127 kB]
+Get:5 http://security.ubuntu.com/ubuntu jammy-security/main amd64 Packages [3,642 kB]
+Get:6 http://us.archive.ubuntu.com/ubuntu jammy-updates/main amd64 Packages [3,908 kB]
+Get:7 http://security.ubuntu.com/ubuntu jammy-security/main Translation-en [509 kB]
+Get:8 http://security.ubuntu.com/ubuntu jammy-security/restricted amd64 Packages [6,505 kB]
+Get:9 http://security.ubuntu.com/ubuntu jammy-security/restricted Translation-en [1,250 kB]
+Get:10 http://security.ubuntu.com/ubuntu jammy-security/universe amd64 Packages [1,053 kB]
+Get:11 http://security.ubuntu.com/ubuntu jammy-security/universe Translation-en [237 kB]
+Get:12 http://security.ubuntu.com/ubuntu jammy-security/multiverse amd64 Packages [79.6 kB]
+Get:13 http://security.ubuntu.com/ubuntu jammy-security/multiverse Translation-en [13.7 kB]
+Get:14 http://us.archive.ubuntu.com/ubuntu jammy-updates/main Translation-en [576 kB]
+Get:15 http://us.archive.ubuntu.com/ubuntu jammy-updates/restricted amd64 Packages [6,740 kB]
+Get:16 http://us.archive.ubuntu.com/ubuntu jammy-updates/restricted Translation-en [1,294 kB]
+Get:17 http://us.archive.ubuntu.com/ubuntu jammy-updates/universe amd64 Packages [1,286 kB]
+Get:18 http://us.archive.ubuntu.com/ubuntu jammy-updates/universe Translation-en [325 kB]
+Get:19 http://us.archive.ubuntu.com/ubuntu jammy-updates/multiverse amd64 Packages [86.1 kB]
+Get:20 http://us.archive.ubuntu.com/ubuntu jammy-updates/multiverse Translation-en [16.6 kB]
+Fetched 27.9 MB in 46s (608 kB/s)
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+187 packages can be upgraded. Run 'apt list --upgradable' to see them.
+vagrant@ig-ubuntu:~$
+vagrant@ig-ubuntu:~$ sudo apt install python3 -y
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+python3 is already the newest version (3.10.6-1~22.04.1).
+python3 set to manually installed.
+0 upgraded, 0 newly installed, 0 to remove and 187 not upgraded.
+vagrant@ig-ubuntu:~$
+vagrant@ig-ubuntu:~$ systemctl --version
+systemd 249 (249.11-0ubuntu3.17)
++PAM +AUDIT +SELINUX +APPARMOR +IMA +SMACK +SECCOMP +GCRYPT +GNUTLS +OPENSSL +ACL +BLKID +CURL +ELFUTILS +FIDO2 +IDN2 -IDN +IPTC +KMOD +LIBCRYPTSETUP +LIBFDISK +PCRE2 -PWQUALITY -P11KIT -QRENCODE +BZIP2 +LZ4 +XZ +ZLIB +ZSTD -XKBCOMMON +UTMP +SYSVINIT default-hierarchy=unified
+vagrant@ig-ubuntu:~$ python3 –version
+vagrant@ig-ubuntu:~$
+vagrant@ig-ubuntu:~$ ps -p 1 -o pid,comm,args
+    PID COMMAND         COMMAND
+      1 systemd         /sbin/init
+vagrant@ig-ubuntu:~$
+vagrant@ig-ubuntu:~$ sudo mkdir -p /opt/Expr7
+vagrant@ig-ubuntu:~$
+vagrant@ig-ubuntu:~$ ls -l /opt
+total 8
+drwxr-xr-x 2 root root 4096 Oct 10 06:26 Expr7
+drwxr-xr-x 7 root root 4096 Oct 23  2025 VBoxGuestAdditions-7.2.4
+vagrant@ig-ubuntu:~$
+vagrant@ig-ubuntu:~$ sudo chown -R $USER:$USER /opt/Expr7
+vagrant@ig-ubuntu:~$
+vagrant@ig-ubuntu:~$ cd /opt/E
+
+nano app.py
+#!/usr/bin/env python3
+import time
+import logging
+import sys
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s",
+    stream=sys.stdout
+)
+logging.info("InfraGuardian Python application starting")
+counter = 0
+while True:
+    counter += 1
+    logging.info(
+        "Application is healthy - check number %d",
+        counter
+    )
+    time.sleep(10)
+
+
+Ctrl + O → Enter → Ctrl + X
+
+
+vagrant@ig-ubuntu:/opt/Expr7$ python3 /opt/Expr7/app.py
+2026-10-10 06:28:16,185 - INFO - InfraGuardian Python application starting
+2026-10-10 06:28:16,186 - INFO - Application is healthy - check number 1
+2026-10-10 06:28:26,194 - INFO - Application is healthy - check number 2
+2026-10-10 06:28:36,209 - INFO - Application is healthy - check number 3
+2026-10-10 06:28:46,231 - INFO - Application is healthy - check number 4
+2026-10-10 06:28:56,242 - INFO - Application is healthy - check number 5
+2026-10-10 06:29:06,253 - INFO - Application is healthy - check number 6
+2026-10-10 06:29:16,268 - INFO - Application is healthy - check number 7
+2026-10-10 06:29:26,280 - INFO - Application is healthy - check number 8
+^CTraceback (most recent call last):
+  File "/opt/Expr7/app.py", line 18, in <module>
+    time.sleep(10)
+KeyboardInterrupt
+
+vagrant@ig-ubuntu:/opt/Expr7$ sudo nano /etc/systemd/system/pyapp.service
+
+[Unit]
+Description=Expr7 Python Application
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /opt/Expr7/app.py
+Restart=on-failure
+RestartSec=5
+User=vagrant
+
+[Install]
+WantedBy=multi-user.target
+
+Ctrl + O → Enter → Ctrl + X
+
+
+vagrant@ig-ubuntu:/opt/Expr7$
+vagrant@ig-ubuntu:/opt/Expr7$ sudo systemctl daemon-reload
+vagrant@ig-ubuntu:/opt/Expr7$
+vagrant@ig-ubuntu:/opt/Expr7$ sudo systemctl start pyapp.service
+vagrant@ig-ubuntu:/opt/Expr7$
+vagrant@ig-ubuntu:/opt/Expr7$ sudo systemctl status pyapp.service
+● pyapp.service - Expr7 Python Application
+     Loaded: loaded (/etc/systemd/system/pyapp.service; disabled; vendor preset: enabled)
+     Active: active (running) since Sat 2026-10-10 06:43:30 UTC; 7s ago
+   Main PID: 3885 (python3)
+      Tasks: 1 (limit: 2219)
+     Memory: 4.4M
+        CPU: 79ms
+     CGroup: /system.slice/pyapp.service
+             └─3885 /usr/bin/python3 /opt/Expr7/app.py
+
+Oct 10 06:43:30 ig-ubuntu systemd[1]: Started Expr7 Python Application.
+Oct 10 06:43:30 ig-ubuntu python3[3885]: 2026-10-10 06:43:30,586 - INFO - InfraGuardian Python application starting
+Oct 10 06:43:30 ig-ubuntu python3[3885]: 2026-10-10 06:43:30,586 - INFO - Application is healthy - check number 1
+vagrant@ig-ubuntu:/opt/Expr7$
+vagrant@ig-ubuntu:/opt/Expr7$ sudo journalctl -u pyapp.service -n 20
+Oct 10 06:43:30 ig-ubuntu systemd[1]: Started Expr7 Python Application.
+Oct 10 06:43:30 ig-ubuntu python3[3885]: 2026-10-10 06:43:30,586 - INFO - InfraGuardian Python application starting
+Oct 10 06:43:30 ig-ubuntu python3[3885]: 2026-10-10 06:43:30,586 - INFO - Application is healthy - check number 1
+Oct 10 06:43:40 ig-ubuntu python3[3885]: 2026-10-10 06:43:40,596 - INFO - Application is healthy - check number 2
+vagrant@ig-ubuntu:/opt/Expr7$
+vagrant@ig-ubuntu:/opt/Expr7$ pgrep -af "/opt/Expr7/app.py"
+3885 /usr/bin/python3 /opt/Expr7/app.py
+vagrant@ig-ubuntu:/opt/Expr7$
+vagrant@ig-ubuntu:/opt/Expr7$ sudo kill -9 3885
+vagrant@ig-ubuntu:/opt/Expr7$
+vagrant@ig-ubuntu:/opt/Expr7$ sudo systemctl status pyapp.service
+● pyapp.service - Expr7 Python Application
+     Loaded: loaded (/etc/systemd/system/pyapp.service; disabled; vendor preset: enabled)
+     Active: active (running) since Sat 2026-10-10 06:44:32 UTC; 9s ago
+   Main PID: 3908 (python3)
+      Tasks: 1 (limit: 2219)
+     Memory: 4.4M
+        CPU: 61ms
+     CGroup: /system.slice/pyapp.service
+             └─3908 /usr/bin/python3 /opt/Expr7/app.py
+
+Oct 10 06:44:32 ig-ubuntu systemd[1]: Started Expr7 Python Application.
+Oct 10 06:44:32 ig-ubuntu python3[3908]: 2026-10-10 06:44:32,896 - INFO - InfraGuardian Python application starting
+Oct 10 06:44:32 ig-ubuntu python3[3908]: 2026-10-10 06:44:32,897 - INFO - Application is healthy - check number 1
+vagrant@ig-ubuntu:/opt/Expr7$
+vagrant@ig-ubuntu:/opt/Expr7$ sudo journalctl -u pyapp.service -n 30
+Oct 10 06:43:30 ig-ubuntu systemd[1]: Started Expr7 Python Application.
+Oct 10 06:43:30 ig-ubuntu python3[3885]: 2026-10-10 06:43:30,586 - INFO - InfraGuardian Python application starting
+Oct 10 06:43:30 ig-ubuntu python3[3885]: 2026-10-10 06:43:30,586 - INFO - Application is healthy - check number 1
+Oct 10 06:43:40 ig-ubuntu python3[3885]: 2026-10-10 06:43:40,596 - INFO - Application is healthy - check number 2
+Oct 10 06:43:50 ig-ubuntu python3[3885]: 2026-10-10 06:43:50,607 - INFO - Application is healthy - check number 3
+Oct 10 06:44:00 ig-ubuntu python3[3885]: 2026-10-10 06:44:00,621 - INFO - Application is healthy - check number 4
+Oct 10 06:44:10 ig-ubuntu python3[3885]: 2026-10-10 06:44:10,632 - INFO - Application is healthy - check number 5
+Oct 10 06:44:20 ig-ubuntu python3[3885]: 2026-10-10 06:44:20,645 - INFO - Application is healthy - check number 6
+Oct 10 06:44:27 ig-ubuntu systemd[1]: pyapp.service: Main process exited, code=killed, status=9/KILL
+Oct 10 06:44:27 ig-ubuntu systemd[1]: pyapp.service: Failed with result 'signal'.
+Oct 10 06:44:32 ig-ubuntu systemd[1]: pyapp.service: Scheduled restart job, restart counter is at 1.
+Oct 10 06:44:32 ig-ubuntu systemd[1]: Stopped Expr7 Python Application.
+Oct 10 06:44:32 ig-ubuntu systemd[1]: Started Expr7 Python Application.
+Oct 10 06:44:32 ig-ubuntu python3[3908]: 2026-10-10 06:44:32,896 - INFO - InfraGuardian Python application starting
+Oct 10 06:44:32 ig-ubuntu python3[3908]: 2026-10-10 06:44:32,897 - INFO - Application is healthy - check number 1
+Oct 10 06:44:42 ig-ubuntu python3[3908]: 2026-10-10 06:44:42,908 - INFO - Application is healthy - check number 2
+Oct 10 06:44:52 ig-ubuntu python3[3908]: 2026-10-10 06:44:52,923 - INFO - Application is healthy - check number 3
+vagrant@ig-ubuntu:/opt/Expr7$ 

@@ -1,0 +1,179 @@
+vagrant@ig-ubuntu:~$ ls -lh /var/log
+total 2.1M
+-rw-r--r--  1 root      root               0 Oct 23  2025 alternatives.log
+-rw-r-----  1 root      adm                0 Oct 11 12:44 apport.log
+-rw-r-----  1 root      adm             5.3K Oct 10 09:49 apport.log.1
+drwxr-xr-x  2 root      root            4.0K Oct 11 12:44 apt
+-rw-r-----  1 syslog    adm             2.3K Oct 11 12:46 auth.log
+-rw-r-----  1 syslog    adm              72K Oct 10 09:17 auth.log.1
+-rw-r--r--  1 root      root               0 Oct 23  2025 bootstrap.log
+-rw-rw----  1 root      utmp               0 Oct 11 12:44 btmp
+-rw-rw----  1 root      utmp               0 Oct 23  2025 btmp.1
+-rw-r-----  1 syslog    adm             309K Sep 24 05:09 cloud-init.log
+-rw-r-----  1 root      adm              23K Sep 24 05:09 cloud-init-output.log
+-rw-r--r--  1 root      root            126K Oct 11 12:46 disk-health.log
+-rw-r-----  1 root      adm              49K Sep 24 05:09 dmesg
+-rw-r-----  1 root      adm              50K Sep 24 05:02 dmesg.0
+-rw-r-----  1 root      adm              16K Sep 22 06:36 dmesg.1.gz
+-rw-r-----  1 root      adm              16K Sep 19 05:58 dmesg.2.gz
+-rw-r-----  1 root      adm              16K Sep 15 06:39 dmesg.3.gz
+-rw-r-----  1 root      adm              16K Sep 14 04:37 dmesg.4.gz
+-rw-r--r--  1 root      root               0 Oct 11 12:44 dpkg.log
+-rw-r--r--  1 root      root            1015 Sep 22 06:57 dpkg.log.1
+-rw-r--r--  1 root      root             32K Sep 24 05:13 faillog
+drwxrwx---  4 root      adm             4.0K Oct 23  2025 installer
+drwxr-sr-x+ 4 root      systemd-journal 4.0K Sep 14 04:37 journal
+-rw-r-----  1 syslog    adm              476 Oct 11 12:44 kern.log
+-rw-r-----  1 syslog    adm             386K Oct 11 12:44 kern.log.1
+drwxr-xr-x  2 landscape landscape       4.0K Oct 23  2025 landscape
+-rw-rw-r--  1 root      utmp            286K Oct 11 12:45 lastlog
+drwxr-xr-x  2 root      root            4.0K Sep 26 06:51 myapp
+drwx------  2 root      root            4.0K Sep 11  2024 private
+-rw-r-----  1 syslog    adm             9.6K Oct 11 12:46 syslog
+-rw-r-----  1 syslog    adm             934K Oct 11 12:44 syslog.1
+-rw-r--r--  1 root      root               0 Oct 23  2025 ubuntu-advantage.log
+-rw-rw-r--  1 root      utmp             21K Oct 11 12:45 wtmp
+vagrant@ig-ubuntu:~$
+vagrant@ig-ubuntu:~$ sudo journalctl -n 20
+Oct 11 12:45:26 ig-ubuntu sudo[4992]: pam_unix(sudo:session): session closed for user root
+Oct 11 12:45:31 ig-ubuntu python3[3908]: 2026-10-11 12:45:31,010 - INFO - Application is healthy - check number 727
+Oct 11 12:45:37 ig-ubuntu sudo[4996]:  vagrant : TTY=pts/0 ; PWD=/home/vagrant ; USER=root ; COMMAND=/usr/bin/journalctl -n 500
+Oct 11 12:45:37 ig-ubuntu sudo[4996]: pam_unix(sudo:session): session opened for user root(uid=0) by vagrant(uid=1000)
+Oct 11 12:45:37 ig-ubuntu sudo[4996]: pam_unix(sudo:session): session closed for user root
+Oct 11 12:45:41 ig-ubuntu python3[3908]: 2026-10-11 12:45:41,020 - INFO - Application is healthy - check number 728
+Oct 11 12:45:51 ig-ubuntu python3[3908]: 2026-10-11 12:45:51,031 - INFO - Application is healthy - check number 729
+Oct 11 12:46:01 ig-ubuntu python3[3908]: 2026-10-11 12:46:01,040 - INFO - Application is healthy - check number 730
+Oct 11 12:46:01 ig-ubuntu systemd[1]: Starting Generate Disk Health Report...
+Oct 11 12:46:01 ig-ubuntu systemd[1]: disk-health.service: Deactivated successfully.
+Oct 11 12:46:01 ig-ubuntu systemd[1]: Finished Generate Disk Health Report.
+Oct 11 12:46:08 ig-ubuntu sudo[5005]:  vagrant : TTY=pts/0 ; PWD=/home/vagrant ; USER=root ; COMMAND=/usr/bin/journalctl -n 1000
+Oct 11 12:46:08 ig-ubuntu sudo[5005]: pam_unix(sudo:session): session opened for user root(uid=0) by vagrant(uid=1000)
+Oct 11 12:46:08 ig-ubuntu sudo[5005]: pam_unix(sudo:session): session closed for user root
+Oct 11 12:46:11 ig-ubuntu python3[3908]: 2026-10-11 12:46:11,051 - INFO - Application is healthy - check number 731
+Oct 11 12:46:21 ig-ubuntu python3[3908]: 2026-10-11 12:46:21,068 - INFO - Application is healthy - check number 732
+Oct 11 12:46:31 ig-ubuntu python3[3908]: 2026-10-11 12:46:31,079 - INFO - Application is healthy - check number 733
+Oct 11 12:46:41 ig-ubuntu python3[3908]: 2026-10-11 12:46:41,086 - INFO - Application is healthy - check number 734
+Oct 11 12:46:49 ig-ubuntu sudo[5016]:  vagrant : TTY=pts/0 ; PWD=/home/vagrant ; USER=root ; COMMAND=/usr/bin/journalctl -n 20
+Oct 11 12:46:49 ig-ubuntu sudo[5016]: pam_unix(sudo:session): session opened for user root(uid=0) by vagrant(uid=1000)
+vagrant@ig-ubuntu:~$
+vagrant@ig-ubuntu:~$ sudo journalctl -n 500 | grep -i "error"
+Oct 10 09:49:55 ig-ubuntu snapd[4753]: stateengine.go:161: state ensure error: persistent network error: Get "https://api.snapcraft.io/api/v1/snaps/sections": dial tcp: lookup api.snapcraft.io: Temporary failure in name resolution
+vagrant@ig-ubuntu:~$
+vagrant@ig-ubuntu:~$ sudo journalctl -n 1000 | grep -Ei "error|failed|failure" | sort | uniq -c | sort -nr | head -10
+      1 Oct 11 12:44:32 ig-ubuntu systemd[1]: fwupd-refresh.service: Main process exited, code=exited, status=1/FAILURE
+      1 Oct 11 12:44:32 ig-ubuntu systemd[1]: fwupd-refresh.service: Failed with result 'exit-code'.
+      1 Oct 11 12:44:32 ig-ubuntu systemd[1]: Failed to start Refresh fwupd metadata and update motd.
+      1 Oct 10 09:49:55 ig-ubuntu snapd[4753]: stateengine.go:161: state ensure error: persistent network error: Get "https://api.snapcraft.io/api/v1/snaps/sections": dial tcp: lookup api.snapcraft.io: Temporary failure in name resolution
+      1 Oct 10 09:49:14 ig-ubuntu systemd[1]: systemd-journald.service: Failed with result 'watchdog'.
+      1 Oct 10 09:49:14 ig-ubuntu systemd[1]: snapd.service: Failed with result 'watchdog'.
+      1 Oct 10 08:50:30 ig-ubuntu systemd[1]: systemd-journald.service: Failed with result 'watchdog'.
+      1 Oct 10 08:50:30 ig-ubuntu snapd[4287]: stateengine.go:161: state ensure error: Post "https://api.snapcraft.io/v2/snaps/refresh": net/http: request canceled while waiting for connection (Client.Timeout exceeded while awaiting headers)
+      1 Oct 10 08:19:31 ig-ubuntu snapd[4287]: stateengine.go:161: state ensure error: persistent network error: Post "https://api.snapcraft.io/v2/snaps/refresh": dial tcp: lookup api.snapcraft.io: Temporary failure in name resolution
+      1 Oct 10 08:19:31 ig-ubuntu snapd[4287]: autorefresh.go:640: Cannot prepare auto-refresh change due to a permanent network error: persistent network error: Post "https://api.snapcraft.io/v2/snaps/refresh": dial tcp: lookup api.snapcraft.io: Temporary failure in name resolution
+vagrant@ig-ubuntu:~$
+vagrant@ig-ubuntu:~$ yes > /dev/null & PID=$!
+[1] 5038
+vagrant@ig-ubuntu:~$ top
+top - 12:48:00 up  9:10,  1 user,  load average: 0.13, 0.05, 0.02
+Tasks: 144 total,   2 running, 142 sleeping,   0 stopped,   0 zombie
+%Cpu(s): 28.7 us, 22.2 sy,  0.0 ni, 48.3 id,  0.0 wa,  0.0 hi,  0.9 si,  0.0 st
+MiB Mem :   1963.7 total,    963.0 free,    198.1 used,    802.6 buff/cache
+MiB Swap:   2968.0 total,   2968.0 free,      0.0 used.   1606.6 avail Mem
+
+    PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND
+   5038 vagrant   20   0    5768    992    904 R  99.7   0.0   0:17.15 yes
+   5029 root      20   0       0      0      0 I   1.0   0.0   0:00.40 kworker/1:0-events
+     14 root      20   0       0      0      0 I   0.3   0.0   0:34.53 rcu_sched
+    460 root      rt   0  289452  27232   9072 S   0.3   1.4   0:23.98 multipathd
+    926 root      20   0  287084   1284   1144 S   0.3   0.1   0:58.99 VBoxDRMClient
+   4676 root      20   0       0      0      0 I   0.3   0.0   0:04.60 kworker/0:1-events
+   4981 vagrant   20   0   17476   8280   5760 S   0.3   0.4   0:00.12 sshd
+   5039 vagrant   20   0   10492   3896   3292 R   0.3   0.2   0:00.04 top
+      1 root      20   0  167640  13192   8400 S   0.0   0.7   0:23.89 systemd
+      2 root      20   0       0      0      0 S   0.0   0.0   0:00.23 kthreadd
+      3 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 rcu_gp
+      4 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 rcu_par_gp
+      5 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 slub_flushwq
+      6 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 netns
+      8 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 kworker/0:0H-events_highpri
+     10 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 mm_percpu_wq
+     11 root      20   0       0      0      0 S   0.0   0.0   0:00.00 rcu_tasks_rude_
+     12 root      20   0       0      0      0 S   0.0   0.0   0:00.00 rcu_tasks_trace
+     13 root      20   0       0      0      0 S   0.0   0.0   0:04.04 ksoftirqd/0
+     15 root      rt   0       0      0      0 S   0.0   0.0   0:01.92 migration/0
+     16 root     -51   0       0      0      0 S   0.0   0.0   0:00.00 idle_inject/0
+     18 root      20   0       0      0      0 S   0.0   0.0   0:00.00 cpuhp/0
+     19 root      20   0       0      0      0 S   0.0   0.0   0:00.01 cpuhp/1
+     20 root     -51   0       0      0      0 S   0.0   0.0   0:00.00 idle_inject/1
+     21 root      rt   0       0      0      0 S   0.0   0.0   0:02.70 migration/1
+     22 root      20   0       0      0      0 S   0.0   0.0   0:02.87 ksoftirqd/1
+     24 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 kworker/1:0H-events_highpri
+     25 root      20   0       0      0      0 S   0.0   0.0   0:00.01 kdevtmpfs
+     26 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 inet_frag_wq
+     27 root      20   0       0      0      0 S   0.0   0.0   0:00.01 kauditd
+     28 root      20   0       0      0      0 S   0.0   0.0   0:00.07 khungtaskd
+     29 root      20   0       0      0      0 S   0.0   0.0   0:00.00 oom_reaper
+     30 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 writeback
+     31 root      20   0       0      0      0 S   0.0   0.0   0:05.87 kcompactd0
+     32 root      25   5       0      0      0 S   0.0   0.0   0:00.00 ksmd
+     33 root      39  19       0      0      0 S   0.0   0.0   0:00.00 khugepaged
+     80 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 kintegrityd
+     81 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 kblockd
+     82 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 blkcg_punt_bio
+     84 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 tpm_dev_wq
+[2]+  Stopped                 top
+vagrant@ig-ubuntu:~$
+vagrant@ig-ubuntu:~$ ps -p $PID -o pid,ppid,user,%cpu,%mem,stat,cmd
+    PID    PPID USER     %CPU %MEM STAT CMD
+   5038    4982 vagrant  54.9  0.0 R    yes
+vagrant@ig-ubuntu:~$
+vagrant@ig-ubuntu:~$ sudo lsof -p $PID
+COMMAND  PID    USER   FD   TYPE DEVICE SIZE/OFF    NODE NAME
+yes     5038 vagrant  cwd    DIR  253,0     4096 1179650 /home/vagrant
+yes     5038 vagrant  rtd    DIR  253,0     4096       2 /
+yes     5038 vagrant  txt    REG  253,0    31112  525541 /usr/bin/yes
+yes     5038 vagrant  mem    REG  253,0  3048928  525209 /usr/lib/locale/locale-archive
+yes     5038 vagrant  mem    REG  253,0  2220400  544728 /usr/lib/x86_64-linux-gnu/libc.so.6
+yes     5038 vagrant  mem    REG  253,0   240936  534386 /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2
+yes     5038 vagrant    0u   CHR  136,0      0t0       3 /dev/pts/0
+yes     5038 vagrant    1w   CHR    1,3      0t0       5 /dev/null
+yes     5038 vagrant    2u   CHR  136,0      0t0       3 /dev/pts/0
+vagrant@ig-ubuntu:~$
+vagrant@ig-ubuntu:~$ strace -c ls /var/log
+alternatives.log  auth.log       btmp.1                 dmesg       dmesg.3.gz  faillog    kern.log.1  private               wtmp
+apport.log        auth.log.1     cloud-init.log         dmesg.0     dmesg.4.gz  installer  landscape   syslog
+apport.log.1      bootstrap.log  cloud-init-output.log  dmesg.1.gz  dpkg.log    journal    lastlog     syslog.1
+apt               btmp           disk-health.log        dmesg.2.gz  dpkg.log.1  kern.log   myapp       ubuntu-advantage.log
+% time     seconds  usecs/call     calls    errors syscall
+------ ----------- ----------- --------- --------- ----------------
+  0.00    0.000000           0         5           read
+  0.00    0.000000           0         4           write
+  0.00    0.000000           0         9           close
+  0.00    0.000000           0        18           mmap
+  0.00    0.000000           0         7           mprotect
+  0.00    0.000000           0         1           munmap
+  0.00    0.000000           0         3           brk
+  0.00    0.000000           0         2           ioctl
+  0.00    0.000000           0         4           pread64
+  0.00    0.000000           0         2         2 access
+  0.00    0.000000           0         1           execve
+  0.00    0.000000           0         2         2 statfs
+  0.00    0.000000           0         2         1 arch_prctl
+  0.00    0.000000           0         2           getdents64
+  0.00    0.000000           0         1           set_tid_address
+  0.00    0.000000           0         7           openat
+  0.00    0.000000           0         8           newfstatat
+  0.00    0.000000           0         1           set_robust_list
+  0.00    0.000000           0         1           prlimit64
+  0.00    0.000000           0         1           getrandom
+  0.00    0.000000           0         1           statx
+  0.00    0.000000           0         1           rseq
+------ ----------- ----------- --------- --------- ----------------
+100.00    0.000000           0        83         5 total
+vagrant@ig-ubuntu:~$
+vagrant@ig-ubuntu:~$ kill $PID
+[1]-  Terminated              yes > /dev/null
+vagrant@ig-ubuntu:~$
+vagrant@ig-ubuntu:~$ ps -p $PID
+    PID TTY          TIME CMD
+vagrant@ig-ubuntu:~$

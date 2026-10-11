@@ -106,3 +106,26 @@ Vagrant multi-VM lab setup using VirtualBox provider.
 - cat data.txt
 - cat report.txt
 - cat student.txt
+
+## Commands Used For Experiment7
+- sudo apt update
+- sudo apt install python3 -y
+- systemctl --version
+- python3 –version
+- ps -p 1 -o pid,comm,args
+- sudo mkdir -p /opt/Expr7
+- ls -l /opt
+- sudo chown -R $USER:$USER /opt/Expr7
+- cd /opt/E
+- nano app.py
+- /opt/Expr7$ python3 /opt/Expr7/app.py
+- /opt/Expr7$ sudo nano /etc/systemd/system/pyapp.service
+- sudo systemctl daemon-reload
+- sudo systemctl start pyapp.service
+- sudo systemctl status pyapp.service
+- sudo journalctl -u pyapp.service -n 20
+- pgrep -af "/opt/Expr7/app.py"
+- sudo kill -9 3885
+- sudo systemctl status pyapp.service
+- sudo journalctl -u pyapp.service -n 30
+- 

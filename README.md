@@ -128,4 +128,92 @@ Vagrant multi-VM lab setup using VirtualBox provider.
 - sudo kill -9 3885
 - sudo systemctl status pyapp.service
 - sudo journalctl -u pyapp.service -n 30
-- 
+
+## Commands Used For Experiment5
+- sudo groupadd teamA
+- sudo groupadd teamB
+- sudo groupadd teamC
+- getent group teamA
+- getent group teamB
+- getent group teamC
+- sudo useradd -m -s /bin/bash alice
+- sudo useradd -m -s /bin/bash bob
+- sudo useradd -m -s /bin/bash charlie
+- sudo useradd -m -s /bin/bash david
+- sudo useradd -m -s /bin/bash emma
+- sudo useradd -m -s /bin/bash frank
+- sudo passwd alice
+- sudo passwd bob
+- sudo passwd charlie
+- sudo passwd david
+- sudo passwd emma
+- sudo passwd frank
+- sudo usermod -aG teamA alice
+- sudo usermod -aG teamA bob
+- sudo usermod -aG teamB charlie
+- sudo usermod -aG teamB david
+- sudo usermod -aG teamC emma
+- sudo usermod -aG teamC frank
+- groups alice
+- groups charlie
+- groups emma
+- sudo mkdir -p /projects/teamA
+- sudo mkdir -p /projects/teamB
+- sudo mkdir -p /projects/teamC
+- ls -ld /projects/*
+- sudo chown root:teamA /projects/teamA
+- sudo chown root:teamB /projects/teamB
+- sudo chown root:teamC /projects/teamC
+- ls -ld /projects/*
+- sudo chmod 2770 /projects/teamA
+- sudo chmod 2770 /projects/teamB
+- sudo chmod 2770 /projects/teamC
+- ls -ld /projects/*
+- sudo apt update
+- sudo apt install acl -y
+- getfacl /projects/teamA
+- sudo setfacl -m g:teamA:rwx /projects/teamA
+- sudo setfacl -m g:teamB:rwx /projects/teamB
+- sudo setfacl -m g:teamC:rwx /projects/teamC
+- sudo setfacl -m d:g:teamA:rwx /projects/teamA
+- sudo setfacl -m d:g:teamB:rwx /projects/teamB
+- sudo setfacl -m d:g:teamC:rwx /projects/teamC
+- getfacl /projects/teamA
+- sudo -iu alice
+       - cd /projects/teamA
+            - echo "Team A Project Data" > project.txt
+            - ls -l
+            - cat project.txt
+            - exit
+- sudo -iu charlie
+       - cd /projects/teamA
+       - exit
+- df -T /projects
+- sudo apt install quota -y
+- sudo edquota -g teamA
+- sudo edquota -g teamB
+- sudo edquota -g teamC
+- sudo repquota -a
+- sudo visudo -f /etc/sudoers.d/project-roles
+- command -v systemctl
+- command -v journalctl
+- sudo visudo -c
+- sudo -iu alice
+       - sudo -l
+       - exit
+- sudo -iu charlie
+       - sudo -l
+       - exit
+- sudo -iu emma
+       - sudo -l
+       - exit
+- getent group teamA
+- getent group teamB
+- getent group teamC
+- ls -ld /projects/*
+- getfacl /projects/teamA
+- getfacl /projects/teamB
+- getfacl /projects/teamC
+- sudo repquota -a
+- sudo -l -U alice
+-    

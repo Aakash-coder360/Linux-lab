@@ -1,0 +1,337 @@
+vagrant@ig-ubuntu:~$ sudo groupadd teamA
+vagrant@ig-ubuntu:~$ sudo groupadd teamB
+vagrant@ig-ubuntu:~$ sudo groupadd teamC
+vagrant@ig-ubuntu:~$
+vagrant@ig-ubuntu:~$ getent group teamA
+teamA:x:1003:
+vagrant@ig-ubuntu:~$ getent group teamB
+teamB:x:1004:
+vagrant@ig-ubuntu:~$ getent group teamC
+teamC:x:1005:
+vagrant@ig-ubuntu:~$
+vagrant@ig-ubuntu:~$ sudo useradd -m -s /bin/bash alice
+vagrant@ig-ubuntu:~$ sudo useradd -m -s /bin/bash bob
+vagrant@ig-ubuntu:~$ sudo useradd -m -s /bin/bash charlie
+vagrant@ig-ubuntu:~$ sudo useradd -m -s /bin/bash david
+vagrant@ig-ubuntu:~$ sudo useradd -m -s /bin/bash emma
+vagrant@ig-ubuntu:~$ sudo useradd -m -s /bin/bash frank
+vagrant@ig-ubuntu:~$
+vagrant@ig-ubuntu:~$ sudo passwd alice
+New password:
+Retype new password:
+passwd: password updated successfully
+vagrant@ig-ubuntu:~$ sudo passwd bob
+New password:
+Retype new password:
+passwd: password updated successfully
+vagrant@ig-ubuntu:~$ sudo passwd charlie
+New password:
+Retype new password:
+passwd: password updated successfully
+vagrant@ig-ubuntu:~$ sudo passwd david
+New password:
+Retype new password:
+passwd: password updated successfully
+vagrant@ig-ubuntu:~$ sudo passwd emma
+New password:
+Retype new password:
+passwd: password updated successfully
+vagrant@ig-ubuntu:~$ sudo passwd frank
+New password:
+Retype new password:
+passwd: password updated successfully
+vagrant@ig-ubuntu:~$
+vagrant@ig-ubuntu:~$ sudo usermod -aG teamA alice
+vagrant@ig-ubuntu:~$ sudo usermod -aG teamA bob
+vagrant@ig-ubuntu:~$
+vagrant@ig-ubuntu:~$ sudo usermod -aG teamB charlie
+vagrant@ig-ubuntu:~$ sudo usermod -aG teamB david
+vagrant@ig-ubuntu:~$
+vagrant@ig-ubuntu:~$ sudo usermod -aG teamC emma
+vagrant@ig-ubuntu:~$ sudo usermod -aG teamC frank
+vagrant@ig-ubuntu:~$
+vagrant@ig-ubuntu:~$ groups alice
+alice : alice teamA
+vagrant@ig-ubuntu:~$
+vagrant@ig-ubuntu:~$ groups charlie
+charlie : charlie teamB
+vagrant@ig-ubuntu:~$
+vagrant@ig-ubuntu:~$ groups emma
+emma : emma teamC
+vagrant@ig-ubuntu:~$
+vagrant@ig-ubuntu:~$ sudo mkdir -p /projects/teamA
+vagrant@ig-ubuntu:~$ sudo mkdir -p /projects/teamB
+vagrant@ig-ubuntu:~$ sudo mkdir -p /projects/teamC
+vagrant@ig-ubuntu:~$
+vagrant@ig-ubuntu:~$ ls -ld /projects/*
+drwxr-xr-x 2 root root 4096 Oct 11 14:40 /projects/teamA
+drwxr-xr-x 2 root root 4096 Oct 11 14:40 /projects/teamB
+drwxr-xr-x 2 root root 4096 Oct 11 14:40 /projects/teamC
+vagrant@ig-ubuntu:~$
+vagrant@ig-ubuntu:~$ sudo chown root:teamA /projects/teamA
+vagrant@ig-ubuntu:~$ sudo chown root:teamB /projects/teamB
+vagrant@ig-ubuntu:~$ sudo chown root:teamC /projects/teamC
+vagrant@ig-ubuntu:~$
+vagrant@ig-ubuntu:~$ ls -ld /projects/*
+drwxr-xr-x 2 root teamA 4096 Oct 11 14:40 /projects/teamA
+drwxr-xr-x 2 root teamB 4096 Oct 11 14:40 /projects/teamB
+drwxr-xr-x 2 root teamC 4096 Oct 11 14:40 /projects/teamC
+vagrant@ig-ubuntu:~$
+vagrant@ig-ubuntu:~$ sudo chmod 2770 /projects/teamA
+vagrant@ig-ubuntu:~$ sudo chmod 2770 /projects/teamB
+vagrant@ig-ubuntu:~$ sudo chmod 2770 /projects/teamC
+vagrant@ig-ubuntu:~$
+vagrant@ig-ubuntu:~$ ls -ld /projects/*
+drwxrws--- 2 root teamA 4096 Oct 11 14:40 /projects/teamA
+drwxrws--- 2 root teamB 4096 Oct 11 14:40 /projects/teamB
+drwxrws--- 2 root teamC 4096 Oct 11 14:40 /projects/teamC
+vagrant@ig-ubuntu:~$
+vagrant@ig-ubuntu:~$ sudo apt update
+Hit:1 http://security.ubuntu.com/ubuntu jammy-security InRelease
+Hit:2 http://us.archive.ubuntu.com/ubuntu jammy InRelease
+Hit:3 http://us.archive.ubuntu.com/ubuntu jammy-updates InRelease
+Hit:4 http://us.archive.ubuntu.com/ubuntu jammy-backports InRelease
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+187 packages can be upgraded. Run 'apt list --upgradable' to see them.
+vagrant@ig-ubuntu:~$
+vagrant@ig-ubuntu:~$ sudo apt install acl -y
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+acl is already the newest version (2.3.1-1).
+0 upgraded, 0 newly installed, 0 to remove and 187 not upgraded.
+vagrant@ig-ubuntu:~$
+vagrant@ig-ubuntu:~$ getfacl /projects/teamA
+getfacl: Removing leading '/' from absolute path names
+# file: projects/teamA
+# owner: root
+# group: teamA
+# flags: -s-
+user::rwx
+group::rwx
+other::---
+
+vagrant@ig-ubuntu:~$ sudo setfacl -m g:teamA:rwx /projects/teamA
+vagrant@ig-ubuntu:~$ sudo setfacl -m g:teamB:rwx /projects/teamB
+vagrant@ig-ubuntu:~$ sudo setfacl -m g:teamC:rwx /projects/teamC
+vagrant@ig-ubuntu:~$
+vagrant@ig-ubuntu:~$ sudo setfacl -m d:g:teamA:rwx /projects/teamA
+vagrant@ig-ubuntu:~$ sudo setfacl -m d:g:teamB:rwx /projects/teamB
+vagrant@ig-ubuntu:~$ sudo setfacl -m d:g:teamC:rwx /projects/teamC
+vagrant@ig-ubuntu:~$
+vagrant@ig-ubuntu:~$ getfacl /projects/teamA
+getfacl: Removing leading '/' from absolute path names
+# file: projects/teamA
+# owner: root
+# group: teamA
+# flags: -s-
+user::rwx
+group::rwx
+group:teamA:rwx
+mask::rwx
+other::---
+default:user::rwx
+default:group::rwx
+default:group:teamA:rwx
+default:mask::rwx
+default:other::---
+
+vagrant@ig-ubuntu:~$ sudo -iu alice
+alice@ig-ubuntu:~$
+alice@ig-ubuntu:~$ cd /projects/teamA
+alice@ig-ubuntu:/projects/teamA$ echo "Team A Project Data" > project.txt
+alice@ig-ubuntu:/projects/teamA$
+alice@ig-ubuntu:/projects/teamA$ ls -l
+total 4
+-rw-rw----+ 1 alice teamA 20 Oct 11 14:44 project.txt
+alice@ig-ubuntu:/projects/teamA$
+alice@ig-ubuntu:/projects/teamA$ cat project.txt
+Team A Project Data
+alice@ig-ubuntu:/projects/teamA$
+alice@ig-ubuntu:/projects/teamA$ exit
+logout
+vagrant@ig-ubuntu:~$ 
+vagrant@ig-ubuntu:~$ sudo -iu charlie
+charlie@ig-ubuntu:~$
+charlie@ig-ubuntu:~$ cd /projects/teamA
+-bash: cd: /projects/teamA: Permission denied
+charlie@ig-ubuntu:~$ exit
+logout
+vagrant@ig-ubuntu:~$ df -T /projects
+Filesystem                        Type 1K-blocks    Used Available Use% Mounted on
+/dev/mapper/ubuntu--vg-ubuntu--lv ext4  31811408 5182224  24987712  18% /
+vagrant@ig-ubuntu:~$
+vagrant@ig-ubuntu:~$ findmnt /projects
+vagrant@ig-ubuntu:~$
+vagrant@ig-ubuntu:~$ sudo apt install quota -y
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+quota is already the newest version (4.06-1build2).
+0 upgraded, 0 newly installed, 0 to remove and 187 not upgraded.
+vagrant@ig-ubuntu:~$
+vagrant@ig-ubuntu:~$ sudo edquota -g teamA
+vagrant@ig-ubuntu:~$ sudo edquota -g teamB
+vagrant@ig-ubuntu:~$ sudo edquota -g teamC
+vagrant@ig-ubuntu:~$ sudo repquota -a
+*** Report for user quotas on device /dev/mapper/ubuntu--vg-ubuntu--lv
+Block grace time: 7days; Inode grace time: 7days
+                        Block limits                File limits
+User            used    soft    hard  grace    used  soft  hard  grace
+----------------------------------------------------------------------
+root      -- 5168944       0       0          46585     0     0
+man       --    1452       0       0            155     0     0
+_apt      --      20       0       0              5     0     0
+systemd-network --     280       0       0              5     0     0
+systemd-resolve --     964       0       0              1     0     0
+systemd-timesync --       4       0       0              2     0     0
+pollinate --       4       0       0              1     0     0
+syslog    --    2068       0       0              8     0     0
+tss       --       4       0       0              1     0     0
+landscape --      12       0       0              5     0     0
+fwupd-refresh --       4       0       0              1     0     0
+vagrant   --     144       0       0             36     0     0
+
+
+vagrant@ig-ubuntu:~$ sudo visudo -f /etc/sudoers.d/project-roles
+vagrant@ig-ubuntu:~$ command -v systemctl
+/usr/bin/systemctl
+vagrant@ig-ubuntu:~$ command -v journalctl
+/usr/bin/journalctl
+vagrant@ig-ubuntu:~$ sudo visudo -c
+/etc/sudoers: parsed OK
+/etc/sudoers.d/99_vagrant: parsed OK
+/etc/sudoers.d/README: parsed OK
+/etc/sudoers.d/project-roles: parsed OK
+/etc/sudoers.d/vagrant: parsed OK
+vagrant@ig-ubuntu:~$ sudo -iu alice
+alice@ig-ubuntu:~$
+alice@ig-ubuntu:~$ sudo -l
+[sudo] password for alice:
+Matching Defaults entries for alice on ig-ubuntu:
+    env_reset, exempt_group=sudo, mail_badpass, secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin, use_pty
+
+User alice may run the following commands on ig-ubuntu:
+    (root) /usr/bin/systemctl status nginx, /usr/bin/systemctl restart nginx
+alice@ig-ubuntu:~$ exit
+logout
+vagrant@ig-ubuntu:~$
+vagrant@ig-ubuntu:~$ sudo -iu charlie
+charlie@ig-ubuntu:~$
+charlie@ig-ubuntu:~$ sudo -l
+[sudo] password for charlie:
+Matching Defaults entries for charlie on ig-ubuntu:
+    env_reset, exempt_group=sudo, mail_badpass, secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin, use_pty
+
+User charlie may run the following commands on ig-ubuntu:
+    (root) /usr/bin/systemctl status nginx
+charlie@ig-ubuntu:~$
+charlie@ig-ubuntu:~$ exit
+logout
+vagrant@ig-ubuntu:~$ sudo -iu emma
+emma@ig-ubuntu:~$
+emma@ig-ubuntu:~$ sudo -l
+[sudo] password for emma:
+Matching Defaults entries for emma on ig-ubuntu:
+    env_reset, exempt_group=sudo, mail_badpass, secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin, use_pty
+
+User emma may run the following commands on ig-ubuntu:
+    (root) /usr/bin/journalctl -u nginx
+emma@ig-ubuntu:~$ exit
+logout
+vagrant@ig-ubuntu:~$
+vagrant@ig-ubuntu:~$ getent group teamA
+teamA:x:1003:alice,bob
+vagrant@ig-ubuntu:~$
+vagrant@ig-ubuntu:~$ getent group teamB
+teamB:x:1004:charlie,david
+vagrant@ig-ubuntu:~$
+vagrant@ig-ubuntu:~$ getent group team^C
+vagrant@ig-ubuntu:~$ getent group teamC
+teamC:x:1005:emma,frank
+vagrant@ig-ubuntu:~$
+vagrant@ig-ubuntu:~$ ls -ld /projects/*
+drwxrws---+ 2 root teamA 4096 Oct 11 14:44 /projects/teamA
+drwxrws---+ 2 root teamB 4096 Oct 11 14:40 /projects/teamB
+drwxrws---+ 2 root teamC 4096 Oct 11 14:40 /projects/teamC
+vagrant@ig-ubuntu:~$
+vagrant@ig-ubuntu:~$ getfacl /projects/teamA
+getfacl: Removing leading '/' from absolute path names
+# file: projects/teamA
+# owner: root
+# group: teamA
+# flags: -s-
+user::rwx
+group::rwx
+group:teamA:rwx
+mask::rwx
+other::---
+default:user::rwx
+default:group::rwx
+default:group:teamA:rwx
+default:mask::rwx
+default:other::---
+
+vagrant@ig-ubuntu:~$ getfacl /projects/teamB
+getfacl: Removing leading '/' from absolute path names
+# file: projects/teamB
+# owner: root
+# group: teamB
+# flags: -s-
+user::rwx
+group::rwx
+group:teamB:rwx
+mask::rwx
+other::---
+default:user::rwx
+default:group::rwx
+default:group:teamB:rwx
+default:mask::rwx
+default:other::---
+
+vagrant@ig-ubuntu:~$ getfacl /projects/teamC
+getfacl: Removing leading '/' from absolute path names
+# file: projects/teamC
+# owner: root
+# group: teamC
+# flags: -s-
+user::rwx
+group::rwx
+group:teamC:rwx
+mask::rwx
+other::---
+default:user::rwx
+default:group::rwx
+default:group:teamC:rwx
+default:mask::rwx
+default:other::---
+
+vagrant@ig-ubuntu:~$ sudo repquota -a
+*** Report for user quotas on device /dev/mapper/ubuntu--vg-ubuntu--lv
+Block grace time: 7days; Inode grace time: 7days
+                        Block limits                File limits
+User            used    soft    hard  grace    used  soft  hard  grace
+----------------------------------------------------------------------
+root      -- 5168952       0       0          46586     0     0
+man       --    1452       0       0            155     0     0
+_apt      --      20       0       0              5     0     0
+systemd-network --     280       0       0              5     0     0
+systemd-resolve --     964       0       0              1     0     0
+systemd-timesync --       4       0       0              2     0     0
+pollinate --       4       0       0              1     0     0
+syslog    --    2068       0       0              8     0     0
+tss       --       4       0       0              1     0     0
+landscape --      12       0       0              5     0     0
+fwupd-refresh --       4       0       0              1     0     0
+vagrant   --     144       0       0             36     0     0
+emma      --       4       0       0              1     0     0
+
+
+vagrant@ig-ubuntu:~$ sudo -l -U alice
+Matching Defaults entries for alice on ig-ubuntu:
+    env_reset, exempt_group=sudo, mail_badpass, secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin, use_pty
+
+User alice may run the following commands on ig-ubuntu:
+    (root) /usr/bin/systemctl status nginx, /usr/bin/systemctl restart nginx

@@ -180,14 +180,14 @@ Vagrant multi-VM lab setup using VirtualBox provider.
 - sudo setfacl -m d:g:teamC:rwx /projects/teamC
 - getfacl /projects/teamA
 - sudo -iu alice
-       - cd /projects/teamA
-            - echo "Team A Project Data" > project.txt
-            - ls -l
-            - cat project.txt
-            - exit
+     - cd /projects/teamA
+          - echo "Team A Project Data" > project.txt
+          - ls -l
+          - cat project.txt
+          - exit
 - sudo -iu charlie
-       - cd /projects/teamA
-       - exit
+     - cd /projects/teamA
+     - exit
 - df -T /projects
 - sudo apt install quota -y
 - sudo edquota -g teamA
@@ -199,14 +199,14 @@ Vagrant multi-VM lab setup using VirtualBox provider.
 - command -v journalctl
 - sudo visudo -c
 - sudo -iu alice
-       - sudo -l
-       - exit
+     - sudo -l
+     - exit
 - sudo -iu charlie
-       - sudo -l
-       - exit
+     - sudo -l
+     - exit
 - sudo -iu emma
-       - sudo -l
-       - exit
+     - sudo -l
+     - exit
 - getent group teamA
 - getent group teamB
 - getent group teamC

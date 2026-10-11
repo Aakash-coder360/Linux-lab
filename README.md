@@ -31,7 +31,20 @@ Vagrant multi-VM lab setup using VirtualBox provider.
      - sh s2.sh
      - exit
 
-## Commands Used For Lab3
+## Commands Used For Lab2
+- ls -lh /var/log
+- sudo journalctl -n 20
+- sudo journalctl -n 500 | grep -i "error"
+- sudo journalctl -n 1000 | grep -Ei "error|failed|failure" | sort | uniq -c | sort -nr | head -10
+- yes > /dev/null & PID=$!
+- top
+- ps -p $PID -o pid,ppid,user,%cpu,%mem,stat,cmd
+- sudo lsof -p $PID
+- strace -c ls /var/log
+- kill $PID
+- ps -p $PID
+
+ ## Commands Used For Lab3
 - vagrant ssh ubuntu
 - sudo apt update
 - sudo apt install rsync -y

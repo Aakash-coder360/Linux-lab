@@ -212,8 +212,57 @@ Vagrant multi-VM lab setup using VirtualBox provider.
 - getent group teamC
 - ls -ld /projects/*
 - getfacl /projects/teamA
-- getfacl /projects/teamB
-- getfacl /projects/teamC
-- sudo repquota -a
-- sudo -l -U alice
--    
+
+## Commands Used For Experiment8
+- lsblk -o NAME,SIZE,TYPE,FSTYPE,MOUNTPOINTS
+- & "C:\Program Files\Oracle\VirtualBox
+- Get-Content .\.vagrant\machines\ubuntu\virtualbox\id
+- vagrant up ubuntu
+- vagrant ssh ubuntu
+- lsblk -o NAME,SIZE,TYPE,FSTYPE,MOUNTPOINTS
+- sudo apt update
+- sudo apt install lvm2 -y
+- lvm version
+- lsblk
+- sudo pvcreate /dev/sdb
+- sudo pvs
+- sudo vgcreate vgdata /dev/sdb
+- sudo vgs
+- sudo lvcreate -L 1G -n lvdata vgdata
+- sudo lvs
+- sudo mkfs.ext4 /dev/vgdata/lvdata
+- sudo blkid /dev/vgdata/lvdata
+- sudo mkdir -p /data
+- sudo mount /dev/vgdata/lvdata /data
+- df -h /data
+- echo "InfraGuardian LVM Experiment" | sudo tee /data/test.txt
+- cat /data/test.txt
+- sudo vgs
+- sudo lvs
+- df -h /data
+- sudo lvextend -L +1G /dev/vgdata/lvdata
+- sudo lvs
+- df -h /data
+- sudo resize2fs /dev/vgdata/lvdata
+- df -h /data
+- findmnt /data
+- lsblk
+- sudo pvs
+- sudo vgs
+- sudo lvs
+- df -h /data
+- findmnt /data
+- sudo apt update
+- sudo apt install firewalld -y
+- sudo firewall-cmd --version
+- sudo systemctl enable --now firewalld
+- sudo systemctl status firewalld
+- sudo firewall-cmd --get-active-zones
+- sudo firewall-cmd --zone=public --list-all
+- sudo firewall-cmd --permanent --zone=public --add-service=ssh
+- sudo firewall-cmd --permanent --zone=public --add-port=22/tcp
+- sudo firewall-cmd --permanent --zone=public --add-service=http
+- sudo firewall-cmd --permanent --zone=public --add-port=80/tcp
+- sudo firewall-cmd --permanent --zone=public --add-service=https
+- sudo firewall-cmd --reload
+- sudo firewall-cmd --zone=public --list-services

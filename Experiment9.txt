@@ -260,6 +260,18 @@ Oct 17 07:24:05 ig-rocky systemd[1]: Started Fail2Ban Service.
 Oct 17 07:24:05 ig-rocky fail2ban-server[6030]: Server ready
 [vagrant@ig-rocky ~]$
 [vagrant@ig-rocky ~]$ sudo nano /etc/fail2ban/jail.local
+
+  [DEFAULT]
+bantime = 10m
+findtime = 10m
+maxretry = 3
+
+[sshd]
+enabled = true
+port = ssh
+filter = sshd
+backend = systemd
+
 [vagrant@ig-rocky ~]$
 [vagrant@ig-rocky ~]$ sudo systemctl restart fail2ban
 [vagrant@ig-rocky ~]$

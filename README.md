@@ -266,3 +266,50 @@ Vagrant multi-VM lab setup using VirtualBox provider.
 - sudo firewall-cmd --permanent --zone=public --add-service=https
 - sudo firewall-cmd --reload
 - sudo firewall-cmd --zone=public --list-services
+
+## Commands Used For Experiment9
+- vagrant ssh rocky
+- hostname
+- cat /etc/os-release
+- ip addr
+- hostname -I
+- sudo systemctl status sshd
+- sudo systemctl enable sshd
+- sudo systemctl status sshd
+- sudo useradd -m labuser
+- sudo passwd labuser
+- id labuser
+- sudo dnf install fail2ban -y
+- sudo dnf install epel-release -y
+- sudo dnf install fail2ban -y
+- sudo systemctl enable --now fail2ban
+- sudo systemctl status fail2ban
+- sudo nano /etc/fail2ban/jail.local
+- sudo systemctl restart fail2ban
+- sudo fail2ban-client status sshd
+- hostname
+- ip addr
+- hostname -I
+- ping -c 4 192.168.56.12
+- ssh labuser@192.168.56.12
+     - whoami
+     - exit
+- ssh labuser@192.168.56.12
+- sudo fail2ban-client status sshd
+- sudo journalctl -u fail2ban
+- sudo tail /var/log/fail2ban.log
+- sudo fail2ban-client status sshd
+- sudo fail2ban-client set sshd unbanip 192.168.56.11
+- sudo fail2ban-client status sshd
+- sudo dnf install audit -y
+- sudo systemctl enable --now auditd
+- sudo systemctl status auditd
+- sudo auditctl -w /etc/passwd -p wa -k passwd_changes
+- sudo auditctl -l
+- sudo useradd audit_test
+- grep audit_test /etc/passwd
+- sudo ausearch -k passwd_changes
+- sudo aureport -f
+- sudo userdel -r audit_test
+- sudo userdel -r labuser
+- 

@@ -312,4 +312,108 @@ Vagrant multi-VM lab setup using VirtualBox provider.
 - sudo aureport -f
 - sudo userdel -r audit_test
 - sudo userdel -r labuser
-- 
+
+## Commands Used For Experiment10
+- vagrant status
+- vagrant up rocky
+- vagrant snapshot save rocky before-openscap
+- vagrant ssh rocky
+- cat /etc/os-release
+- sudo dnf install openscap-scanner scap-security-guide -y
+- oscap --version
+- ls /usr/share/xml/scap/ssg/content/
+- oscap info /usr/share/xml/scap/ssg/content/ssg-rl9-ds.xml | grep -i cis
+- sudo oscap xccdf eval \
+- --profile xccdf_org.ssgproject.content_profile_cis_server_l1 \
+- --results initial-results.xml \
+- --report initial-report.html \
+- /usr/share/xml/scap/ssg/content/ssg-rl9-ds.xml
+- ls -lh initial-results.xml initial-report.html
+- grep -o '<result>fail</result>' initial-results.xml | wc -l
+- grep -o '<result>pass</result>' initial-results.xml | wc -l
+- grep -B 4 -A 2 '<result>fail</result>' initial-results.xml | grep 'rule-result' | head -20
+- sudo oscap xccdf generate fix \
+- --profile xccdf_org.ssgproject.content_profile_cis_server_l1 \
+- --fix-type bash \
+- --output cis-remediation.sh \
+- /usr/share/xml/scap/ssg/content/ssg-rl9-ds.xml
+- sudo grep -n -A 25 -B 5 "package_aide_installed" cis-remediation.sh
+- rpm -q aide
+- sudo dnf install aide -y
+- rpm -q aide
+- sudo grep -n -A 30 -B 3 "aide_build_database" cis-remediation.sh
+- sudo /usr/sbin/aide --init
+- sudo ls -lh /var/lib/aide/
+- sudo cp -p /var/lib/aide/aide.db.new.gz /var/lib/aide/aide.db.gz
+- sudo ls -lh /var/lib/aide/
+- sudo aide --check
+- sudo grep -n -A 45 -B 3 "aide_check_audit_tools" cis-remediation.sh
+- echo "/usr/sbin/auditctl p+i+n+u+g+s+b+acl+xattrs+sha512" | sudo tee -a /etc/aide.conf
+- echo "/usr/sbin/auditd p+i+n+u+g+s+b+acl+xattrs+sha512" | sudo tee -a /etc/aide.conf
+- echo "/usr/sbin/ausearch p+i+n+u+g+s+b+acl+xattrs+sha512" | sudo tee -a /etc/aide.conf
+- echo "/usr/sbin/aureport p+i+n+u+g+s+b+acl+xattrs+sha512" | sudo tee -a /etc/aide.conf
+- sudo grep -E 'auditctl|auditd|ausearch|aureport' /etc/aide.conf
+- sudo aide --init
+- sudo cp -p /var/lib/aide/aide.db.new.gz /var/lib/aide/aide.db.gz
+- sudo grep -n -A 45 -B 3 "aide_periodic_cron_checking" cis-remediation.sh
+- rpm -q cronie
+- sudo dnf install cronie -y
+- sudo systemctl enable --now crond
+- sudo systemctl status crond
+- sudo grep "aide --check" /etc/crontab
+- echo '05 4 * * * root /usr/sbin/aide --check' | sudo tee -a /etc/crontab
+- sudo grep "aide --check" /etc/crontab
+
+## Commands Used For Experiment6
+- vagrant status
+- vagrant up rocky
+- vagrant snapshot save rocky before-selinux-pam
+- vagrant ssh rocky
+- cat /etc/os-release
+- getenforce
+- sestatus
+- sudo dnf install httpd policycoreutils-python-utils -y
+- sudo systemctl enable --now httpd
+- sudo systemctl status httpd
+- echo "SELinux Lab Test Page" | sudo tee /var/www/html/index.html
+- curl http://localhost
+- sudo mkdir -p /webdata
+- echo "SELinux Protected Page" | sudo tee /webdata/index.html
+- sudo semanage fcontext -d '/webdata(/.*)?' 2>/dev/null || true
+- sudo chcon -t default_t /webdata /webdata/index.html
+- ls -Zd /webdata /webdata/index.html
+- sudo sed -i 's#DocumentRoot "/var/www/html"#DocumentRoot "/webdata"#' /etc/httpd/conf/httpd.conf
+- sudo sed -i '/<Directory "\/var\/www">/,/<\/Directory>/!b' /etc/httpd/conf/httpd.conf
+- sudo bash -c 'cat >> /etc/httpd/conf.d/webdata.conf <<EOF
+     - <Directory "/webdata">
+          - Require all granted
+     - </Directory>
+     - EOF'
+- sudo apachectl configtest
+- sudo systemctl restart httpd
+- curl http://localhost
+- sudo ausearch -m AVC,USER_AVC -ts recent
+- sudo ausearch -m AVC -ts recent | audit2why
+- sudo ausearch -m AVC -ts recent | audit2allow
+- sudo ausearch -m AVC -ts recent | audit2allow -M local_httpd
+- cat local_httpd.te
+- sudo semanage fcontext -a -t httpd_sys_content_t '/webdata(/.*)?'
+- sudo restorecon -Rv /webdata
+- ls -Zd /webdata /webdata/index.html
+- sudo systemctl restart httpd
+- curl http://localhost
+- getenforce
+- sudo ausearch -m AVC -ts recent
+- sudo dnf install libpwquality -y
+- rpm -q libpwquality
+- sudo cp -p /etc/security/pwquality.conf /etc/security/pwquality.conf.bak
+- sudo grep -E '^[[:space:]]*minlen' /etc/security/pwquality.conf
+- sudo sed -i '/^[[:space:]]*minlen[[:space:]]*=/d' /etc/security/pwquality.conf
+- echo "minlen = 12" | sudo tee -a /etc/security/pwquality.conf
+- grep -E '^[[:space:]]*minlen' /etc/security/pwquality.conf
+- sudo useradd -m pamtest
+- sudo passwd pamtest
+- sudo chage -d 0 pamtest
+- grep -n 'pam_pwquality' /etc/pam.d/system-auth /etc/pam.d/password-auth
+- grep -E '^[[:space:]]*minlen' /etc/security/pwquality.conf
+- sudo userdel -r pamtest

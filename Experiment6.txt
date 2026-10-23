@@ -1,0 +1,671 @@
+PS C:\Users\sharm\2601600064\Infraguardian> vagrant status
+Current machine states:
+
+ubuntu                    saved (virtualbox)
+rocky                     saved (virtualbox)
+alma                      not created (virtualbox)
+
+This environment represents multiple VMs. The VMs are all listed
+above with their current state. For more information about a specific
+VM, run `vagrant status NAME`.
+PS C:\Users\sharm\2601600064\Infraguardian> vagrant up rocky
+Bringing machine 'rocky' up with 'virtualbox' provider...
+==> rocky: Checking if box 'bento/rockylinux-9' version '202510.26.0' is up to date...
+==> rocky: Resuming suspended VM...
+==> rocky: Booting VM...
+==> rocky: Waiting for machine to boot. This may take a few minutes...
+    rocky: SSH address: 127.0.0.1:2222
+    rocky: SSH username: vagrant
+    rocky: SSH auth method: private key
+==> rocky: Machine booted and ready!
+==> rocky: Machine already provisioned. Run `vagrant provision` or use the `--provision`
+==> rocky: flag to force provisioning. Provisioners marked to run always will still run.
+PS C:\Users\sharm\2601600064\Infraguardian> 
+PS C:\Users\sharm\2601600064\Infraguardian> vagrant snapshot save rocky before-selinux-pam
+==> rocky: Snapshotting the machine as 'before-selinux-pam'...
+==> rocky: Snapshot saved! You can restore the snapshot at any time by
+==> rocky: using `vagrant snapshot restore`. You can delete it using
+==> rocky: `vagrant snapshot delete`.
+PS C:\Users\sharm\2601600064\Infraguardian>
+PS C:\Users\sharm\2601600064\Infraguardian> vagrant ssh rocky
+
+This system is built by the Bento project by Chef Software
+More information can be found at https://github.com/chef/bento
+
+Use of this system is acceptance of the OS vendor EULA and License Agreements.
+Last login: Sat Oct 17 07:00:38 2026 from 10.0.2.2
+[vagrant@ig-rocky ~]$ cat /etc/os-release
+NAME="Rocky Linux"
+VERSION="9.6 (Blue Onyx)"
+ID="rocky"
+ID_LIKE="rhel centos fedora"
+VERSION_ID="9.6"
+PLATFORM_ID="platform:el9"
+PRETTY_NAME="Rocky Linux 9.6 (Blue Onyx)"
+ANSI_COLOR="0;32"
+LOGO="fedora-logo-icon"
+CPE_NAME="cpe:/o:rocky:rocky:9::baseos"
+HOME_URL="https://rockylinux.org/"
+VENDOR_NAME="RESF"
+VENDOR_URL="https://resf.org/"
+BUG_REPORT_URL="https://bugs.rockylinux.org/"
+SUPPORT_END="2032-05-31"
+ROCKY_SUPPORT_PRODUCT="Rocky-Linux-9"
+ROCKY_SUPPORT_PRODUCT_VERSION="9.6"
+REDHAT_SUPPORT_PRODUCT="Rocky Linux"
+REDHAT_SUPPORT_PRODUCT_VERSION="9.6"
+[vagrant@ig-rocky ~]$
+[vagrant@ig-rocky ~]$ getenforce
+Enforcing
+[vagrant@ig-rocky ~]$
+[vagrant@ig-rocky ~]$ sestatus
+SELinux status:                 enabled
+SELinuxfs mount:                /sys/fs/selinux
+SELinux root directory:         /etc/selinux
+Loaded policy name:             targeted
+Current mode:                   enforcing
+Mode from config file:          enforcing
+Policy MLS status:              enabled
+Policy deny_unknown status:     allowed
+Memory protection checking:     actual (secure)
+Max kernel policy version:      33
+[vagrant@ig-rocky ~]$
+[vagrant@ig-rocky ~]$ sudo dnf install httpd policycoreutils-python-utils -y
+Last metadata expiration check: 0:01:28 ago on Fri 23 Oct 2026 03:07:39 PM UTC.
+Package policycoreutils-python-utils-3.6-2.1.el9.noarch is already installed.
+Dependencies resolved.
+============================================================================================================================================================
+ Package                                           Architecture                Version                                 Repository                      Size
+============================================================================================================================================================
+Installing:
+ httpd                                             x86_64                      2.4.62-13.el9_8.9                       appstream                       47 k
+Upgrading:
+ policycoreutils                                   x86_64                      3.6-5.el9                               baseos                         205 k
+ policycoreutils-python-utils                      noarch                      3.6-5.el9                               appstream                       70 k
+ python3-policycoreutils                           noarch                      3.6-5.el9                               appstream                      2.0 M
+Installing dependencies:
+ apr                                               x86_64                      1.7.0-12.el9_3                          appstream                      122 k
+ apr-util                                          x86_64                      1.6.1-23.el9_8.1                        appstream                       94 k
+ apr-util-bdb                                      x86_64                      1.6.1-23.el9_8.1                        appstream                       12 k
+ httpd-core                                        x86_64                      2.4.62-13.el9_8.9                       appstream                      1.4 M
+ httpd-filesystem                                  noarch                      2.4.62-13.el9_8.9                       appstream                       14 k
+ httpd-tools                                       x86_64                      2.4.62-13.el9_8.9                       appstream                       81 k
+ rocky-logos-httpd                                 noarch                      90.17-1.el9                             appstream                       24 k
+Installing weak dependencies:
+ apr-util-openssl                                  x86_64                      1.6.1-23.el9_8.1                        appstream                       14 k
+ mod_http2                                         x86_64                      2.0.26-6.el9_8.2                        appstream                      163 k
+ mod_lua                                           x86_64                      2.4.62-13.el9_8.9                       appstream                       61 k
+
+Transaction Summary
+============================================================================================================================================================
+Install  11 Packages
+Upgrade   3 Packages
+
+Total download size: 4.3 M
+Downloading Packages:
+(1/14): apr-1.7.0-12.el9_3.x86_64.rpm                                                                                       108 kB/s | 122 kB     00:01
+(2/14): apr-util-bdb-1.6.1-23.el9_8.1.x86_64.rpm                                                                             10 kB/s |  12 kB     00:01
+(3/14): apr-util-1.6.1-23.el9_8.1.x86_64.rpm                                                                                 77 kB/s |  94 kB     00:01
+(4/14): apr-util-openssl-1.6.1-23.el9_8.1.x86_64.rpm                                                                        119 kB/s |  14 kB     00:00
+(5/14): httpd-2.4.62-13.el9_8.9.x86_64.rpm                                                                                  340 kB/s |  47 kB     00:00
+(6/14): httpd-filesystem-2.4.62-13.el9_8.9.noarch.rpm                                                                        54 kB/s |  14 kB     00:00
+(7/14): httpd-tools-2.4.62-13.el9_8.9.x86_64.rpm                                                                            360 kB/s |  81 kB     00:00
+(8/14): httpd-core-2.4.62-13.el9_8.9.x86_64.rpm                                                                             2.8 MB/s | 1.4 MB     00:00
+(9/14): mod_http2-2.0.26-6.el9_8.2.x86_64.rpm                                                                               725 kB/s | 163 kB     00:00
+(10/14): mod_lua-2.4.62-13.el9_8.9.x86_64.rpm                                                                               298 kB/s |  61 kB     00:00
+(11/14): rocky-logos-httpd-90.17-1.el9.noarch.rpm                                                                           105 kB/s |  24 kB     00:00
+(12/14): policycoreutils-python-utils-3.6-5.el9.noarch.rpm                                                                  294 kB/s |  70 kB     00:00
+(13/14): python3-policycoreutils-3.6-5.el9.noarch.rpm                                                                       4.8 MB/s | 2.0 MB     00:00
+(14/14): policycoreutils-3.6-5.el9.x86_64.rpm                                                                               176 kB/s | 205 kB     00:01
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+Total                                                                                                                       727 kB/s | 4.3 MB     00:06
+Running transaction check
+Transaction check succeeded.
+Running transaction test
+Transaction test succeeded.
+Running transaction
+  Preparing        :                                                                                                                                    1/1
+  Installing       : apr-1.7.0-12.el9_3.x86_64                                                                                                         1/17
+  Installing       : apr-util-bdb-1.6.1-23.el9_8.1.x86_64                                                                                              2/17
+  Installing       : apr-util-openssl-1.6.1-23.el9_8.1.x86_64                                                                                          3/17
+  Installing       : apr-util-1.6.1-23.el9_8.1.x86_64                                                                                                  4/17
+  Installing       : httpd-tools-2.4.62-13.el9_8.9.x86_64                                                                                              5/17
+  Upgrading        : policycoreutils-3.6-5.el9.x86_64                                                                                                  6/17
+  Running scriptlet: policycoreutils-3.6-5.el9.x86_64                                                                                                  6/17
+  Upgrading        : python3-policycoreutils-3.6-5.el9.noarch                                                                                          7/17
+  Installing       : rocky-logos-httpd-90.17-1.el9.noarch                                                                                              8/17
+  Running scriptlet: httpd-filesystem-2.4.62-13.el9_8.9.noarch                                                                                         9/17
+  Installing       : httpd-filesystem-2.4.62-13.el9_8.9.noarch                                                                                         9/17
+  Installing       : httpd-core-2.4.62-13.el9_8.9.x86_64                                                                                                            10/17
+  Installing       : mod_lua-2.4.62-13.el9_8.9.x86_64                                                                                                                                                     11/17
+  Installing       : mod_http2-2.0.26-6.el9_8.2.x86_64                                                                                                                                                    12/17
+  Installing       : httpd-2.4.62-13.el9_8.9.x86_64                                                                                                                                                       13/17
+  Running scriptlet: httpd-2.4.62-13.el9_8.9.x86_64                                                                                                                                                       13/17
+  Upgrading        : policycoreutils-python-utils-3.6-5.el9.noarch                                                                                                                                        14/17
+  Cleanup          : policycoreutils-python-utils-3.6-2.1.el9.noarch                                                                                                                                      15/17
+  Cleanup          : python3-policycoreutils-3.6-2.1.el9.noarch                                                                                                                                           16/17
+  Running scriptlet: policycoreutils-3.6-2.1.el9.x86_64                                                                                                                                                   17/17
+  Cleanup          : policycoreutils-3.6-2.1.el9.x86_64                                                                                                                                                   17/17
+  Running scriptlet: httpd-2.4.62-13.el9_8.9.x86_64                                                                                                                                                       17/17
+  Running scriptlet: policycoreutils-3.6-2.1.el9.x86_64                                                                                                                                                                              17/17
+  Running scriptlet: policycoreutils-3.6-2.1.el9.x86_64                                                                                                                                                                                                               17/17
+  Verifying        : apr-1.7.0-12.el9_3.x86_64                                                                                                                                                                                                                         1/17
+  Verifying        : apr-util-1.6.1-23.el9_8.1.x86_64                                                                                                                                                                                                                  2/17
+  Verifying        : apr-util-bdb-1.6.1-23.el9_8.1.x86_64                                                                                                                                                                                                              3/17
+  Verifying        : apr-util-openssl-1.6.1-23.el9_8.1.x86_64                                                                                                                                                                                                          4/17
+  Verifying        : httpd-2.4.62-13.el9_8.9.x86_64                                                                                                                                                                                                                    5/17
+  Verifying        : httpd-core-2.4.62-13.el9_8.9.x86_64                                                                                                                                                                                                               6/17
+  Verifying        : httpd-filesystem-2.4.62-13.el9_8.9.noarch                                                                                                                                                                                                         7/17
+  Verifying        : httpd-tools-2.4.62-13.el9_8.9.x86_64                                                                                                                                                                                                              8/17
+  Verifying        : mod_http2-2.0.26-6.el9_8.2.x86_64                                                                                                                                                                                                                 9/17
+  Verifying        : mod_lua-2.4.62-13.el9_8.9.x86_64                                                                                                                                                                                                                 10/17
+  Verifying        : rocky-logos-httpd-90.17-1.el9.noarch                                                                                                                                                                                                             11/17
+  Verifying        : policycoreutils-3.6-5.el9.x86_64                                                                                                                                                                                                                 12/17
+  Verifying        : policycoreutils-3.6-2.1.el9.x86_64                                                                                                                                                                                                               13/17
+  Verifying        : policycoreutils-python-utils-3.6-5.el9.noarch                                                                                                                                                                                                    14/17
+  Verifying        : policycoreutils-python-utils-3.6-2.1.el9.noarch                                                                                                                                                                                                  15/17
+  Verifying        : python3-policycoreutils-3.6-5.el9.noarch                                                                                                                                                                                                         16/17
+  Verifying        : python3-policycoreutils-3.6-2.1.el9.noarch                                                                                                                                                                                                       17/17
+
+Upgraded:
+  policycoreutils-3.6-5.el9.x86_64                                                  policycoreutils-python-utils-3.6-5.el9.noarch                                                  python3-policycoreutils-3.6-5.el9.noarch
+Installed:
+  apr-1.7.0-12.el9_3.x86_64             apr-util-1.6.1-23.el9_8.1.x86_64   apr-util-bdb-1.6.1-23.el9_8.1.x86_64  apr-util-openssl-1.6.1-23.el9_8.1.x86_64  httpd-2.4.62-13.el9_8.9.x86_64  httpd-core-2.4.62-13.el9_8.9.x86_64  httpd-filesystem-2.4.62-13.el9_8.9.noarch
+  httpd-tools-2.4.62-13.el9_8.9.x86_64  mod_http2-2.0.26-6.el9_8.2.x86_64  mod_lua-2.4.62-13.el9_8.9.x86_64      rocky-logos-httpd-90.17-1.el9.noarch
+
+Complete!
+[vagrant@ig-rocky ~]$
+[vagrant@ig-rocky ~]$ sudo systemctl enable --now httpd
+Created symlink /etc/systemd/system/multi-user.target.wants/httpd.service → /usr/lib/systemd/system/httpd.service.
+[vagrant@ig-rocky ~]$
+[vagrant@ig-rocky ~]$ sudo systemctl status httpd
+● httpd.service - The Apache HTTP Server
+     Loaded: loaded (/usr/lib/systemd/system/httpd.service; enabled; preset: disabled)
+     Active: active (running) since Fri 2026-10-23 15:09:42 UTC; 14s ago
+       Docs: man:httpd.service(8)
+   Main PID: 7221 (httpd)
+     Status: "Total requests: 0; Idle/Busy workers 100/0;Requests/sec: 0; Bytes served/sec:   0 B/sec"
+      Tasks: 177 (limit: 12306)
+     Memory: 26.6M
+        CPU: 412ms
+     CGroup: /system.slice/httpd.service
+             ├─7221 /usr/sbin/httpd -DFOREGROUND
+             ├─7222 /usr/sbin/httpd -DFOREGROUND
+             ├─7223 /usr/sbin/httpd -DFOREGROUND
+             ├─7224 /usr/sbin/httpd -DFOREGROUND
+             └─7225 /usr/sbin/httpd -DFOREGROUND
+
+Oct 23 15:09:42 ig-rocky systemd[1]: Starting The Apache HTTP Server...
+Oct 23 15:09:42 ig-rocky httpd[7221]: AH00558: httpd: Could not reliably determine the server's fully qualified domain name, using 127.0.1.1. Set the 'ServerName' directive globally to suppress this message
+Oct 23 15:09:42 ig-rocky systemd[1]: Started The Apache HTTP Server.
+Oct 23 15:09:42 ig-rocky httpd[7221]: Server configured, listening on: port 80
+[vagrant@ig-rocky ~]$
+[vagrant@ig-rocky ~]$ echo "SELinux Lab Test Page" | sudo tee /var/www/html/index.html
+SELinux Lab Test Page
+[vagrant@ig-rocky ~]$ curl http://localhost
+SELinux Lab Test Page
+[vagrant@ig-rocky ~]$ sudo mkdir -p /webdata
+[vagrant@ig-rocky ~]$
+[vagrant@ig-rocky ~]$ echo "SELinux Protected Page" | sudo tee /webdata/index.html
+SELinux Protected Page
+[vagrant@ig-rocky ~]$
+[vagrant@ig-rocky ~]$ sudo semanage fcontext -d '/webdata(/.*)?' 2>/dev/null || true
+[vagrant@ig-rocky ~]$
+[vagrant@ig-rocky ~]$ sudo chcon -t default_t /webdata /webdata/index.html
+[vagrant@ig-rocky ~]$
+[vagrant@ig-rocky ~]$ ls -Zd /webdata /webdata/index.html
+unconfined_u:object_r:default_t:s0 /webdata  unconfined_u:object_r:default_t:s0 /webdata/index.html
+[vagrant@ig-rocky ~]$
+[vagrant@ig-rocky ~]$ sudo sed -i 's#DocumentRoot "/var/www/html"#DocumentRoot "/webdata"#'
+sed: no input files
+[vagrant@ig-rocky ~]$
+[vagrant@ig-rocky ~]$ sudo sed -i 's#DocumentRoot "/var/www/html"#DocumentRoot "/webdata"#' /etc/httpd/conf/httpd.conf
+[vagrant@ig-rocky ~]$
+[vagrant@ig-rocky ~]$ sudo sed -i '/<Directory "\/var\/www">/,/<\/Directory>/!b' /etc/httpd/conf/httpd.conf
+[vagrant@ig-rocky ~]$
+[vagrant@ig-rocky ~]$ sudo bash -c 'cat >> /etc/httpd/conf.d/webdata.conf <<EOF
+> <Directory "/webdata">
+    Require all granted
+</Directory>
+EOF'
+[vagrant@ig-rocky ~]$ sudo apachectl configtest
+AH00558: httpd: Could not reliably determine the server's fully qualified domain name, using 127.0.1.1. Set the 'ServerName' directive globally to suppress this message
+Syntax OK
+[vagrant@ig-rocky ~]$ sudo systemctl restart httpd
+[vagrant@ig-rocky ~]$
+[vagrant@ig-rocky ~]$ curl http://localhost
+<!doctype html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <title>HTTP Server Test Page powered by: Rocky Linux</title>
+    <style type="text/css">
+      /*<![CDATA[*/
+
+      html {
+        height: 100%;
+        width: 100%;
+      }
+        body {
+  background: rgb(20,72,50);
+  background: -moz-linear-gradient(180deg, rgba(23,43,70,1) 30%, rgba(0,0,0,1) 90%)  ;
+  background: -webkit-linear-gradient(180deg, rgba(23,43,70,1) 30%, rgba(0,0,0,1) 90%) ;
+  background: linear-gradient(180deg, rgba(23,43,70,1) 30%, rgba(0,0,0,1) 90%);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#3c6eb4",endColorstr="#3c95b4",GradientType=1);
+        color: white;
+        font-size: 0.9em;
+        font-weight: 400;
+        font-family: 'Montserrat', sans-serif;
+        margin: 0;
+        padding: 10em 6em 10em 6em;
+        box-sizing: border-box;
+
+      }
+
+
+  h1 {
+    text-align: center;
+    margin: 0;
+    padding: 0.6em 2em 0.4em;
+    color: #fff;
+    font-weight: bold;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 2em;
+  }
+  h1 strong {
+    font-weight: bolder;
+    font-family: 'Montserrat', sans-serif;
+  }
+  h2 {
+    font-size: 1.5em;
+    font-weight:bold;
+  }
+
+  .title {
+    border: 1px solid black;
+    font-weight: bold;
+    position: relative;
+    float: right;
+    width: 150px;
+    text-align: center;
+    padding: 10px 0 10px 0;
+    margin-top: 0;
+  }
+
+  .description {
+    padding: 45px 10px 5px 10px;
+    clear: right;
+    padding: 15px;
+  }
+
+  .section {
+    padding-left: 3%;
+   margin-bottom: 10px;
+  }
+
+  img {
+
+    padding: 2px;
+    margin: 2px;
+  }
+  a:hover img {
+    padding: 2px;
+    margin: 2px;
+  }
+
+  :link {
+    color: rgb(199, 252, 77);
+    text-shadow:
+  }
+  :visited {
+    color: rgb(122, 206, 255);
+  }
+  a:hover {
+    color: rgb(16, 44, 122);
+  }
+  .row {
+    width: 100%;
+    padding: 0 10px 0 10px;
+  }
+
+  footer {
+    padding-top: 6em;
+    margin-bottom: 6em;
+    text-align: center;
+    font-size: xx-small;
+    overflow:hidden;
+    clear: both;
+  }
+
+  .summary {
+    font-size: 140%;
+    text-align: center;
+  }
+
+  #rocky-poweredby img {
+    margin-left: -10px;
+  }
+
+  #logos img {
+    vertical-align: top;
+  }
+
+  /* Desktop  View Options */
+
+  @media (min-width: 768px)  {
+
+    body {
+      padding: 10em 20% !important;
+    }
+
+    .col-md-1, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6,
+    .col-md-7, .col-md-8, .col-md-9, .col-md-10, .col-md-11, .col-md-12 {
+      float: left;
+    }
+
+    .col-md-1 {
+      width: 8.33%;
+    }
+    .col-md-2 {
+      width: 16.66%;
+    }
+    .col-md-3 {
+      width: 25%;
+    }
+    .col-md-4 {
+      width: 33%;
+    }
+    .col-md-5 {
+      width: 41.66%;
+    }
+    .col-md-6 {
+      border-left:3px ;
+      width: 50%;
+
+
+    }
+    .col-md-7 {
+      width: 58.33%;
+    }
+    .col-md-8 {
+      width: 66.66%;
+    }
+    .col-md-9 {
+      width: 74.99%;
+    }
+    .col-md-10 {
+      width: 83.33%;
+    }
+    .col-md-11 {
+      width: 91.66%;
+    }
+    .col-md-12 {
+      width: 100%;
+    }
+  }
+
+  /* Mobile View Options */
+  @media (max-width: 767px) {
+    .col-sm-1, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6,
+    .col-sm-7, .col-sm-8, .col-sm-9, .col-sm-10, .col-sm-11, .col-sm-12 {
+      float: left;
+    }
+
+    .col-sm-1 {
+      width: 8.33%;
+    }
+    .col-sm-2 {
+      width: 16.66%;
+    }
+    .col-sm-3 {
+      width: 25%;
+    }
+    .col-sm-4 {
+      width: 33%;
+    }
+    .col-sm-5 {
+      width: 41.66%;
+    }
+    .col-sm-6 {
+      width: 50%;
+    }
+    .col-sm-7 {
+      width: 58.33%;
+    }
+    .col-sm-8 {
+      width: 66.66%;
+    }
+    .col-sm-9 {
+      width: 74.99%;
+    }
+    .col-sm-10 {
+      width: 83.33%;
+    }
+    .col-sm-11 {
+      width: 91.66%;
+    }
+    .col-sm-12 {
+      width: 100%;
+    }
+    h1 {
+      padding: 0 !important;
+    }
+  }
+
+
+  </style>
+  </head>
+  <body>
+    <h1>HTTP Server <strong>Test Page</strong></h1>
+
+    <div class='row'>
+
+      <div class='col-sm-12 col-md-6 col-md-6 '></div>
+          <p class="summary">This page is used to test the proper operation of
+            an HTTP server after it has been installed on a Rocky Linux system.
+            If you can read this page, it means that the software is working
+            correctly.</p>
+      </div>
+
+      <div class='col-sm-12 col-md-6 col-md-6 col-md-offset-12'>
+
+
+        <div class='section'>
+          <h2>Just visiting?</h2>
+
+          <p>This website you are visiting is either experiencing problems or
+          could be going through maintenance.</p>
+
+          <p>If you would like the let the administrators of this website know
+          that you've seen this page instead of the page you've expected, you
+          should send them an email. In general, mail sent to the name
+          "webmaster" and directed to the website's domain should reach the
+          appropriate person.</p>
+
+          <p>The most common email address to send to is:
+          <strong>"webmaster@example.com"</strong></p>
+
+          <h2>Note:</h2>
+          <p>The Rocky Linux distribution is a stable and reproduceable platform
+          based on the sources of Red Hat Enterprise Linux (RHEL). With this in
+          mind, please understand that:
+
+        <ul>
+          <li>Neither the <strong>Rocky Linux Project</strong> nor the
+          <strong>Rocky Enterprise Software Foundation</strong> have anything to
+          do with this website or its content.</li>
+          <li>The Rocky Linux Project nor the <strong>RESF</strong> have
+          "hacked" this webserver: This test page is included with the
+          distribution.</li>
+        </ul>
+        <p>For more information about Rocky Linux, please visit the
+          <a href="https://rockylinux.org/"><strong>Rocky Linux
+          website</strong></a>.
+        </p>
+        </div>
+      </div>
+      <div class='col-sm-12 col-md-6 col-md-6 col-md-offset-12'>
+        <div class='section'>
+
+          <h2>I am the admin, what do I do?</h2>
+
+        <p>You may now add content to the webroot directory for your
+        software.</p>
+
+        <p><strong>For systems using the
+        <a href="https://httpd.apache.org/">Apache Webserver</strong></a>:
+        You can add content to the directory <code>/var/www/html/</code>.
+        Until you do so, people visiting your website will see this page. If
+        you would like this page to not be shown, follow the instructions in:
+        <code>/etc/httpd/conf.d/welcome.conf</code>.</p>
+
+        <p><strong>For systems using
+        <a href="https://nginx.org">Nginx</strong></a>:
+        You can add your content in a location of your
+        choice and edit the <code>root</code> configuration directive
+        in <code>/etc/nginx/nginx.conf</code>.</p>
+
+        <div id="logos">
+          <a href="https://rockylinux.org/" id="rocky-poweredby"><img src="icons/poweredby.png" alt="[ Powered by Rocky Linux ]" /></a> <!-- Rocky -->
+          <img src="poweredby.png" /> <!-- webserver -->
+        </div>
+      </div>
+      </div>
+
+      <footer class="col-sm-12">
+      <a href="https://apache.org">Apache&trade;</a> is a registered trademark of <a href="https://apache.org">the Apache Software Foundation</a> in the United States and/or other countries.<br />
+      <a href="https://nginx.org">NGINX&trade;</a> is a registered trademark of <a href="https://">F5 Networks, Inc.</a>.
+      </footer>
+
+  </body>
+</html>
+[vagrant@ig-rocky ~]$ sudo ausearch -m AVC,USER_AVC -ts recent
+----
+time->Fri Oct 23 15:13:19 2026
+type=PROCTITLE msg=audit(1792768399.257:1768): proctitle=2F7573722F7362696E2F6874747064002D44464F524547524F554E44
+type=PATH msg=audit(1792768399.257:1768): item=0 name="/webdata/index.html" inode=33753554 dev=08:02 mode=0100644 ouid=0 ogid=0 rdev=00:00 obj=unconfined_u:object_r:default_t:s0 nametype=NORMAL cap_fp=0 cap_fi=0 cap_fe=0 cap_fver=0 cap_frootid=0
+type=CWD msg=audit(1792768399.257:1768): cwd="/"
+type=SYSCALL msg=audit(1792768399.257:1768): arch=c000003e syscall=262 success=no exit=-13 a0=ffffff9c a1=7fed8800a4e0 a2=7fed967fb7c0 a3=0 items=1 ppid=7452 pid=7455 auid=4294967295 uid=48 gid=48 euid=48 suid=48 fsuid=48 egid=48 sgid=48 fsgid=48 tty=(none) ses=4294967295 comm="httpd" exe="/usr/sbin/httpd" subj=system_u:system_r:httpd_t:s0 key=(null)
+type=AVC msg=audit(1792768399.257:1768): avc:  denied  { getattr } for  pid=7455 comm="httpd" path="/webdata/index.html" dev="sda2" ino=33753554 scontext=system_u:system_r:httpd_t:s0 tcontext=unconfined_u:object_r:default_t:s0 tclass=file permissive=0
+----
+time->Fri Oct 23 15:13:19 2026
+type=PROCTITLE msg=audit(1792768399.257:1769): proctitle=2F7573722F7362696E2F6874747064002D44464F524547524F554E44
+type=PATH msg=audit(1792768399.257:1769): item=0 name="/webdata/index.html" inode=33753554 dev=08:02 mode=0100644 ouid=0 ogid=0 rdev=00:00 obj=unconfined_u:object_r:default_t:s0 nametype=NORMAL cap_fp=0 cap_fi=0 cap_fe=0 cap_fver=0 cap_frootid=0
+type=CWD msg=audit(1792768399.257:1769): cwd="/"
+type=SYSCALL msg=audit(1792768399.257:1769): arch=c000003e syscall=262 success=no exit=-13 a0=ffffff9c a1=7fed8800a5b0 a2=7fed967fb7c0 a3=100 items=1 ppid=7452 pid=7455 auid=4294967295 uid=48 gid=48 euid=48 suid=48 fsuid=48 egid=48 sgid=48 fsgid=48 tty=(none) ses=4294967295 comm="httpd" exe="/usr/sbin/httpd" subj=system_u:system_r:httpd_t:s0 key=(null)
+type=AVC msg=audit(1792768399.257:1769): avc:  denied  { getattr } for  pid=7455 comm="httpd" path="/webdata/index.html" dev="sda2" ino=33753554 scontext=system_u:system_r:httpd_t:s0 tcontext=unconfined_u:object_r:default_t:s0 tclass=file permissive=0
+[vagrant@ig-rocky ~]$
+[vagrant@ig-rocky ~]$ sudo ausearch -m AVC -ts recent | audit2why
+type=AVC msg=audit(1792768399.257:1768): avc:  denied  { getattr } for  pid=7455 comm="httpd" path="/webdata/index.html" dev="sda2" ino=33753554 scontext=system_u:system_r:httpd_t:s0 tcontext=unconfined_u:object_r:default_t:s0 tclass=file permissive=0
+
+        Was caused by:
+                Missing type enforcement (TE) allow rule.
+
+                You can use audit2allow to generate a loadable module to allow this access.
+
+type=AVC msg=audit(1792768399.257:1769): avc:  denied  { getattr } for  pid=7455 comm="httpd" path="/webdata/index.html" dev="sda2" ino=33753554 scontext=system_u:system_r:httpd_t:s0 tcontext=unconfined_u:object_r:default_t:s0 tclass=file permissive=0
+
+        Was caused by:
+                Missing type enforcement (TE) allow rule.
+
+                You can use audit2allow to generate a loadable module to allow this access.
+
+[vagrant@ig-rocky ~]$ sudo ausearch -m AVC -ts recent | audit2allow
+
+
+#============= httpd_t ==============
+allow httpd_t default_t:file getattr;
+[vagrant@ig-rocky ~]$
+[vagrant@ig-rocky ~]$ sudo ausearch -m AVC -ts recent | audit2allow -M local_httpd
+******************** IMPORTANT ***********************
+To make this policy package active, execute:
+
+semodule -i local_httpd.pp
+
+[vagrant@ig-rocky ~]$ cat local_httpd.te
+
+module local_httpd 1.0;
+
+require {
+        type default_t;
+        type httpd_t;
+        class file getattr;
+}
+
+#============= httpd_t ==============
+allow httpd_t default_t:file getattr;
+[vagrant@ig-rocky ~]$
+[vagrant@ig-rocky ~]$ sudo semanage fcontext -a -t httpd_sys_content_t '/webdata(/.*)?'
+[vagrant@ig-rocky ~]$
+[vagrant@ig-rocky ~]$ sudo restorecon -Rv /webdata
+Relabeled /webdata from unconfined_u:object_r:default_t:s0 to unconfined_u:object_r:httpd_sys_content_t:s0
+Relabeled /webdata/index.html from unconfined_u:object_r:default_t:s0 to unconfined_u:object_r:httpd_sys_content_t:s0
+[vagrant@ig-rocky ~]$
+[vagrant@ig-rocky ~]$ ls -Zd /webdata /webdata/index.html
+unconfined_u:object_r:httpd_sys_content_t:s0 /webdata  unconfined_u:object_r:httpd_sys_content_t:s0 /webdata/index.html
+[vagrant@ig-rocky ~]$
+[vagrant@ig-rocky ~]$ sudo systemctl restart httpd
+[vagrant@ig-rocky ~]$
+[vagrant@ig-rocky ~]$ curl http://localhost
+SELinux Protected Page
+[vagrant@ig-rocky ~]$
+[vagrant@ig-rocky ~]$ getenforce
+Enforcing
+[vagrant@ig-rocky ~]$ sudo ausearch -m AVC -ts recent
+----
+time->Fri Oct 23 15:13:19 2026
+type=PROCTITLE msg=audit(1792768399.257:1768): proctitle=2F7573722F7362696E2F6874747064002D44464F524547524F554E44
+type=PATH msg=audit(1792768399.257:1768): item=0 name="/webdata/index.html" inode=33753554 dev=08:02 mode=0100644 ouid=0 ogid=0 rdev=00:00 obj=unconfined_u:object_r:default_t:s0 nametype=NORMAL cap_fp=0 cap_fi=0 cap_fe=0 cap_fver=0 cap_frootid=0
+type=CWD msg=audit(1792768399.257:1768): cwd="/"
+type=SYSCALL msg=audit(1792768399.257:1768): arch=c000003e syscall=262 success=no exit=-13 a0=ffffff9c a1=7fed8800a4e0 a2=7fed967fb7c0 a3=0 items=1 ppid=7452 pid=7455 auid=4294967295 uid=48 gid=48 euid=48 suid=48 fsuid=48 egid=48 sgid=48 fsgid=48 tty=(none) ses=4294967295 comm="httpd" exe="/usr/sbin/httpd" subj=system_u:system_r:httpd_t:s0 key=(null)
+type=AVC msg=audit(1792768399.257:1768): avc:  denied  { getattr } for  pid=7455 comm="httpd" path="/webdata/index.html" dev="sda2" ino=33753554 scontext=system_u:system_r:httpd_t:s0 tcontext=unconfined_u:object_r:default_t:s0 tclass=file permissive=0
+----
+time->Fri Oct 23 15:13:19 2026
+type=PROCTITLE msg=audit(1792768399.257:1769): proctitle=2F7573722F7362696E2F6874747064002D44464F524547524F554E44
+type=PATH msg=audit(1792768399.257:1769): item=0 name="/webdata/index.html" inode=33753554 dev=08:02 mode=0100644 ouid=0 ogid=0 rdev=00:00 obj=unconfined_u:object_r:default_t:s0 nametype=NORMAL cap_fp=0 cap_fi=0 cap_fe=0 cap_fver=0 cap_frootid=0
+type=CWD msg=audit(1792768399.257:1769): cwd="/"
+type=SYSCALL msg=audit(1792768399.257:1769): arch=c000003e syscall=262 success=no exit=-13 a0=ffffff9c a1=7fed8800a5b0 a2=7fed967fb7c0 a3=100 items=1 ppid=7452 pid=7455 auid=4294967295 uid=48 gid=48 euid=48 suid=48 fsuid=48 egid=48 sgid=48 fsgid=48 tty=(none) ses=4294967295 comm="httpd" exe="/usr/sbin/httpd" subj=system_u:system_r:httpd_t:s0 key=(null)
+type=AVC msg=audit(1792768399.257:1769): avc:  denied  { getattr } for  pid=7455 comm="httpd" path="/webdata/index.html" dev="sda2" ino=33753554 scontext=system_u:system_r:httpd_t:s0 tcontext=unconfined_u:object_r:default_t:s0 tclass=file permissive=0
+[vagrant@ig-rocky ~]$
+[vagrant@ig-rocky ~]$ sudo dnf install libpwquality -y
+Last metadata expiration check: 0:09:11 ago on Fri 23 Oct 2026 03:07:39 PM UTC.
+Package libpwquality-1.4.4-8.el9.x86_64 is already installed.
+Dependencies resolved.
+Nothing to do.
+Complete!
+[vagrant@ig-rocky ~]$
+[vagrant@ig-rocky ~]$ rpm -q libpwquality
+libpwquality-1.4.4-8.el9.x86_64
+[vagrant@ig-rocky ~]$
+[vagrant@ig-rocky ~]$ sudo cp -p /etc/security/pwquality.conf /etc/security/pwquality.conf.bak
+[vagrant@ig-rocky ~]$
+[vagrant@ig-rocky ~]$ sudo grep -E '^[[:space:]]*minlen' /etc/security/pwquality.conf
+[vagrant@ig-rocky ~]$
+[vagrant@ig-rocky ~]$ sudo sed -i '/^[[:space:]]*minlen[[:space:]]*=/d' /etc/security/pwquality.conf
+[vagrant@ig-rocky ~]$
+[vagrant@ig-rocky ~]$ echo "minlen = 12" | sudo tee -a /etc/security/pwquality.conf
+minlen = 12
+[vagrant@ig-rocky ~]$ grep -E '^[[:space:]]*minlen' /etc/security/pwquality.conf
+minlen = 12
+[vagrant@ig-rocky ~]$ sudo useradd -m pamtest
+[vagrant@ig-rocky ~]$
+[vagrant@ig-rocky ~]$ sudo passwd pamtest
+Changing password for user pamtest.
+New password:
+BAD PASSWORD: The password is shorter than 12 characters
+Retype new password:
+passwd: all authentication tokens updated successfully.
+[vagrant@ig-rocky ~]$
+[vagrant@ig-rocky ~]$ sudo chage -d 0 pamtest
+[vagrant@ig-rocky ~]$
+[vagrant@ig-rocky ~]$ grep -n 'pam_pwquality' /etc/pam.d/system-auth /etc/pam.d/password-auth
+/etc/pam.d/system-auth:10:password    requisite     pam_pwquality.so try_first_pass local_users_only retry=3 authtok_type=
+/etc/pam.d/password-auth:10:password    requisite     pam_pwquality.so try_first_pass local_users_only retry=3 authtok_type=
+[vagrant@ig-rocky ~]$
+[vagrant@ig-rocky ~]$ grep -E '^[[:space:]]*minlen' /etc/security/pwquality.conf
+minlen = 12
+[vagrant@ig-rocky ~]$ sudo userdel -r pamtest
+[vagrant@ig-rocky ~]$
